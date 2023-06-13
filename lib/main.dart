@@ -15,10 +15,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-              primarySwatch: Colors.blue,
+        // primarySwatch: Colors.purple,
+        // accentColor: Colors.deepOrange,
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.purple
+        ).copyWith(
+          secondary: Colors.deepOrange,
+        ),
+        fontFamily: 'Lato'
+      
       ),
       home: ProductsOverviewPage(),
     );
   }
 }
-
