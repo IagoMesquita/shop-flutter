@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/models/product_list.dart';
 
 import '../components/product_grid.dart';
 
@@ -13,6 +15,8 @@ class ProductsOverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ProductList>(context);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text('Minha Loja')),
@@ -29,7 +33,11 @@ class ProductsOverviewPage extends StatelessWidget {
               )
             ],
             onSelected: (FilterOptions selectedValue) {
-              debugPrint(selectedValue.toString());
+              if(selectedValue == FilterOptions.Favorite) {
+                provider.showFavorityOnly();
+              } else {
+                provider.showAll();
+              }
             },
           ),
         ],
