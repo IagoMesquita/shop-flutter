@@ -7,6 +7,7 @@ class ProductList with ChangeNotifier {
 
   // [..._items] é um clone de _items. Se passasse _items no get, seria uma referencia, que poderia ser alterada por qlq um
   List<Product> get items => [..._items];
+  List<Product> get favoriteItems => _items.where((item) => item.isFarovite).toList();
 
   void addProduct(Product product) {
     _items.add(product);

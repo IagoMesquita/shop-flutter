@@ -12,9 +12,8 @@ class ProductGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ProductList>(context);
-    final loadedProducts = !isShowOnlyFavorite
-        ? provider.items
-        : provider.items.where((item) => item.isFarovite).toList();
+    final loadedProducts =
+        isShowOnlyFavorite ? provider.favoriteItems : provider.items;
     return GridView.builder(
       padding: const EdgeInsets.all(10),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
