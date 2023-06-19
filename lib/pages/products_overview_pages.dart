@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../components/badge_widget.dart';
 import '../components/product_grid.dart';
 
 enum FilterOptions { Favorite, All }
@@ -18,7 +19,7 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Minha Loja')),
+        title: const Text('Minha Loja'),
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => [
@@ -41,9 +42,18 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
               });
             },
           ),
+          BadgeWidget(
+            value: '2',
+            child: IconButton(
+              onPressed: () {},
+              icon:const Icon(Icons.shopping_cart),
+            ),
+          )
         ],
       ),
-      body: ProductGrid(isShowOnlyFavorite: _showFavorityOnly,),
+      body: ProductGrid(
+        isShowOnlyFavorite: _showFavorityOnly,
+      ),
     );
   }
 }
