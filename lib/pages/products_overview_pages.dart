@@ -45,12 +45,13 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
             },
           ),
           Consumer<Cart>(
-            builder: (ctx, cart, child ) => BadgeWidget(
-              value: cart.itemsCount.toString(),
-              child: IconButton(
+            child: IconButton(
                 onPressed: () {},
                 icon:const Icon(Icons.shopping_cart),
               ),
+            builder: (ctx, cart, child ) => BadgeWidget(
+              value: cart.itemsCount.toString(),
+              child: child!,
             ),
           )
         ],
