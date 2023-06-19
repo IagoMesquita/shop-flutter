@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/models/cart.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final Cart cart = Provider.of(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -25,7 +29,7 @@ class CartPage extends StatelessWidget {
                   ),
                   const SizedBox(width: 10,),
                   Chip(
-                    label: Text('R\$1000'),
+                    label: Text('R\$${cart.totalAmount}'),
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     labelStyle: TextStyle(
                         color:
