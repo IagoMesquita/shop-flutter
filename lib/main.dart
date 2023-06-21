@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/models/order.dart';
 import 'package:shop/models/order_list.dart';
 import 'package:shop/models/product_list.dart';
+import 'package:shop/pages/orders_pages.dart';
 import 'package:shop/utils/app_routes.dart';
 
 import 'package:shop/pages/products_overview_pages.dart';
@@ -38,10 +38,11 @@ class MyApp extends StatelessWidget {
               secondary: Colors.deepOrange,
             ),
             fontFamily: 'Lato'),
-        home: const ProductsOverviewPage(),
         routes: {
+          AppRoutes.HOME:(context) => const ProductsOverviewPage(),
           AppRoutes.PRODUCT_DETAIL:(context) => const ProductDetailPage(),
           AppRoutes.CART:(context) => const CartPage(),
+          AppRoutes.ORDERS:(context) => const OrdersPage(),
         },
       ),
     );
