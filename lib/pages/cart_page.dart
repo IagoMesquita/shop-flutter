@@ -48,9 +48,9 @@ class CartPage extends StatelessWidget {
                   const Spacer(),
                   TextButton(
                     onPressed: () {},
-                    child: Text('COMPRAR'),
                     style: TextButton.styleFrom(
                         textStyle: const TextStyle(fontSize: 20)),
+                    child: const Text('COMPRAR'),
                   )
                 ],
               ),
