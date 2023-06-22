@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/utils/app_routes.dart';
@@ -43,7 +41,7 @@ class ProductGridItem extends StatelessWidget {
                   action: SnackBarAction(
                     label: 'DESFAZER',
                     onPressed: () {
-                      print('DESFAZER');
+                      cart.removeSingleItem(product.id);
                     },
 
                   ) ,
