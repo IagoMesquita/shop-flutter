@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class ProductFormPage extends StatelessWidget {
@@ -10,6 +9,22 @@ class ProductFormPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Formulário de Produto'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Form(
+            child: ListView(
+          children: [
+            TextFormField(
+              decoration: const InputDecoration(labelText: 'Nome'),
+              textInputAction: TextInputAction.next,              
+            ),
+            TextFormField(
+              decoration: const InputDecoration(labelText: 'Preço'),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            ),
+          ],
+        )),
       ),
     );
   }
