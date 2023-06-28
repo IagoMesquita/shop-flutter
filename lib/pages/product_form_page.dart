@@ -96,7 +96,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   alignment: Alignment.center,
                   child: _imageUrlController.text.isEmpty
                       ? const Text('Informe a Url')
-                      : Image.network(_imageUrlController.text),
+                      : FittedBox(
+                          fit: BoxFit.cover,
+                          child: Image.network(_imageUrlController.text),
+                        ),
                 )
               ],
             ),
