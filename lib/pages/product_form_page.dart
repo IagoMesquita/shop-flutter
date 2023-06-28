@@ -14,12 +14,23 @@ class _ProductFormPageState extends State<ProductFormPage> {
   final _imageUrlController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+
+    _imageUrlFocus.addListener(updateImageUrl);
+  }
+
+  @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _priceFocus.dispose();
     _descriptionFocus.dispose();
     _imageUrlFocus.dispose();
+    _imageUrlFocus.removeListener(updateImageUrl);
+  }
+
+  void updateImageUrl() {
+    setState(() {});
   }
 
   @override
