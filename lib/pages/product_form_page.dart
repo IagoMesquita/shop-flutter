@@ -60,7 +60,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
         title: const Text('Formulário de Produto'),
         actions: [
           IconButton(
-            onPressed: _submitted,
+            onPressed: _submitForm,
             icon: const Icon(Icons.save),
           )
         ],
@@ -115,7 +115,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     focusNode: _imageUrlFocus,
                     controller: _imageUrlController,
                     onSaved: (urlImage) => _formData['urlImage'] = urlImage ?? '',
-                    onFieldSubmitted: (_) => _submitted(),
+                    onFieldSubmitted: (_) => _submitForm(),
                   ),
                 ),
                 Container(
