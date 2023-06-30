@@ -40,7 +40,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     setState(() {});
   }
 
-  void _submitted() {
+  void _submitForm() {
     _formKey.currentState?.save();
     final newProduct = Product(
       id: Random().nextDouble().toString(),
