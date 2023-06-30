@@ -14,7 +14,6 @@ class AppDrawer extends StatelessWidget {
             automaticallyImplyLeading: false,
             title: const Text('Seja bem vindo Usuário!'),
           ),
-          const Divider(),
           ListTile(
             leading: const Icon(Icons.shop),
             title: const Text('Loja'),
@@ -30,6 +29,14 @@ class AppDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed(AppRoutes.ORDERS);
             },
           ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.edit),
+            title: const Text('Gerenciar Produtos'),
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(AppRoutes.PRODUCTS);
+            },
+        ),
         ],
       ),
     );
