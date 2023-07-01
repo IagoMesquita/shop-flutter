@@ -37,9 +37,29 @@ class ProductItem extends StatelessWidget {
                 color: Theme.of(context).colorScheme.error,
               ),
               onPressed: () {
-                Provider.of<ProductList>(context, listen: false).removeProduct(productItem);
-                // Tbm funciona
-                // Provider.of<ProductList>(context, listen: false).removeProduct(productItem);
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text('Excluir Produto'),
+                    content: const Text('Tem certeza?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Não'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Provider.of<ProductList>(context, listen: false)
+                              .removeProduct(productItem);
+                          Navigator.of(context).pop();
+                          // Tbm funciona
+                          // Provider.of<ProductList>(context, listen: false).removeProduct(productItem);
+                        },
+                        child: const Text('Sim'),
+                      )
+                    ],
+                  ),
+                );
               },
             )
           ],
@@ -48,3 +68,35 @@ class ProductItem extends StatelessWidget {
     );
   }
 }
+
+
+// OUTRA FORMA DE USAR O SowDialog:
+
+      //  showDialog<bool>(
+      //             context: context,
+      //             builder: (ctx) => AlertDialog(
+      //               title: const Text('Excluir Produto'),
+      //               content: const Text('Tem certeza?'),
+      //               actions: [
+      //                 TextButton(
+      //                   onPressed: () => Navigator.of(context).pop(false),
+      //                   child: const Text('Não'),
+      //                 ),
+      //                 TextButton(
+      //                   onPressed: () {
+                   
+      //                     Navigator.of(context).pop(true);
+                          
+      //                   },
+      //                   child: const Text('Sim'),
+      //                 )
+      //               ],
+      //             ),
+      //           ).then((value) {
+      //             if(value ?? false) {
+      //               Provider.of<ProductList>(context, listen: false)
+      //                 .removeProduct(productItem);
+      //               // Tbm funciona
+      //               // Provider.of<ProductList>(context, listen: false).removeProduct(productItem);
+      //             }
+      //           });
