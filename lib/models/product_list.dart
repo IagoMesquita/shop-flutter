@@ -9,14 +9,15 @@ class ProductList with ChangeNotifier {
 
   // [..._items] é um clone de _items. Se passasse _items no get, seria uma referencia, que poderia ser alterada por qlq um
   List<Product> get items => [..._items];
-  List<Product> get favoriteItems => _items.where((item) => item.isFarovite).toList();
+  List<Product> get favoriteItems =>
+      _items.where((item) => item.isFarovite).toList();
 
   int get itemCout {
     return _items.length;
   }
 
-   void saveProduct(Map<String, Object> data) {
-    bool hasId = data['id'] != null; 
+  void saveProduct(Map<String, Object> data) {
+    bool hasId = data['id'] != null;
 
     final product = Product(
       id: hasId ? data['id'] as String : Random().nextDouble().toString(),
@@ -26,12 +27,11 @@ class ProductList with ChangeNotifier {
       imageUrl: data['urlImage'] as String,
     );
 
-    if(hasId) {
+    if (hasId) {
       updateProduct(product);
     } else {
       addProduct(product);
     }
-
   }
 
   void addProduct(Product product) {
@@ -40,18 +40,26 @@ class ProductList with ChangeNotifier {
   }
 
   void updateProduct(Product product) {
-   int index = _items.indexWhere((p) => p.id == product.id);
-      print('Index: $index');
-    if(index >= 0) {
+    int index = _items.indexWhere((p) => p.id == product.id);
+    print('Index: $index');
+    if (index >= 0) {
       _items[index] = product;
+      notifyListeners();
     }
-
-    notifyListeners();
-
   }
 
-  void removeProduct(Product product) {
-    _items.remove(product);
-    notifyListeners();
+   void removeProduct(Product product) {
+    int index = _items.indexWhere((p) => p.id == product.id);
+
+    print('Index: $index');
+    if (index >= 0) {
+      _items.removeWhere((p) => p.id == product.id);
+      notifyListeners();
+    }
   }
+
+  // void removeProduct(Product product) {
+  //   _items.remove(product);
+  //   notifyListeners();
+  // }
 }
