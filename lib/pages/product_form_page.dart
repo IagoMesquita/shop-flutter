@@ -59,15 +59,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
     }
 
     _formKey.currentState?.save();
-    final newProduct = Product(
-      id: Random().nextDouble().toString(),
-      name: _formData['name'] as String,
-      price: _formData['price'] as double,
-      description: _formData['description'] as String,
-      imageUrl: _formData['urlImage'] as String,
-    );
 
-    Provider.of<ProductList>(context, listen: false).addProduct(newProduct);
+    Provider.of<ProductList>(context, listen: false).addProductForm(_formData);
     Navigator.of(context).pop();
   }
 
@@ -122,17 +115,16 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   },
                   onSaved: (price) =>
                       _formData['price'] = double.parse(price ?? '0.0'),
-
                   validator: (value) {
                     final priceString = value ?? '';
                     final price = double.tryParse(priceString) ?? -1;
 
-                    if(price <= 0) {
+                    if (price <= 0) {
                       return 'Informe um preço válido.';
                     }
 
                     return null;
-                  } ,
+                  },
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -149,15 +141,14 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       _formData['description'] = description ?? '',
                   validator: (value) {
                     final description = value ?? '';
-                    if(description.trim().isEmpty) {
+                    if (description.trim().isEmpty) {
                       return 'Descrição é obrigatória';
                     }
-                    if(description.trim().length < 10) {
+                    if (description.trim().length < 10) {
                       return 'Descrição deve ter no mínimo 10 caracteres';
                     }
 
                     return null;
-
                   },
                 ),
                 Row(
