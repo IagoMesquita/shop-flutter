@@ -60,7 +60,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
     _formKey.currentState?.save();
 
-    Provider.of<ProductList>(context, listen: false).addProductForm(_formData);
+    Provider.of<ProductList>(context, listen: false).saveProduct(_formData);
     Navigator.of(context).pop();
   }
 
