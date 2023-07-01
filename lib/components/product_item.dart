@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/models/product.dart';
+import 'package:shop/models/product_list.dart';
+import 'package:shop/utils/app_routes.dart';
 
 class ProductItem extends StatelessWidget {
   final Product productItem;
@@ -21,14 +24,43 @@ class ProductItem extends StatelessWidget {
                 Icons.edit,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  AppRoutes.PRODUCT_FORM,
+                  arguments: productItem,
+                );
+              },
             ),
             IconButton(
               icon: Icon(
                 Icons.delete,
                 color: Theme.of(context).colorScheme.error,
               ),
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text('Excluir Produto'),
+                    content: const Text('Tem certeza?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Não'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Provider.of<ProductList>(context, listen: false)
+                              .removeProduct(productItem);
+                          Navigator.of(context).pop();
+                          // Tbm funciona
+                          // Provider.of<ProductList>(context, listen: false).removeProduct(productItem);
+                        },
+                        child: const Text('Sim'),
+                      )
+                    ],
+                  ),
+                );
+              },
             )
           ],
         ),
@@ -36,3 +68,35 @@ class ProductItem extends StatelessWidget {
     );
   }
 }
+
+
+// OUTRA FORMA DE USAR O SowDialog:
+
+      //  showDialog<bool>(
+      //             context: context,
+      //             builder: (ctx) => AlertDialog(
+      //               title: const Text('Excluir Produto'),
+      //               content: const Text('Tem certeza?'),
+      //               actions: [
+      //                 TextButton(
+      //                   onPressed: () => Navigator.of(context).pop(false),
+      //                   child: const Text('Não'),
+      //                 ),
+      //                 TextButton(
+      //                   onPressed: () {
+                   
+      //                     Navigator.of(context).pop(true);
+                          
+      //                   },
+      //                   child: const Text('Sim'),
+      //                 )
+      //               ],
+      //             ),
+      //           ).then((value) {
+      //             if(value ?? false) {
+      //               Provider.of<ProductList>(context, listen: false)
+      //                 .removeProduct(productItem);
+      //               // Tbm funciona
+      //               // Provider.of<ProductList>(context, listen: false).removeProduct(productItem);
+      //             }
+      //           });
