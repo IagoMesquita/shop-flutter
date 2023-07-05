@@ -25,7 +25,7 @@ class ProductGridItem extends StatelessWidget {
                 product.toggleFavorite();
               },
               icon: Icon(
-                  product.isFarovite ? Icons.favorite : Icons.favorite_border),
+                  product.isFavorite ? Icons.favorite : Icons.favorite_border),
               // color: Theme.of(context).accentColor,
               color: Theme.of(context).colorScheme.secondary,
             ),
