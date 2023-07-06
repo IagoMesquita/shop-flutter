@@ -39,7 +39,7 @@ class ProductList with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    final response = await http.post(Uri.parse('$_baseUrl/products'),
+    final response = await http.post(Uri.parse('$_baseUrl/products.json'),
         body: jsonEncode(
           {
             "name": product.name,
