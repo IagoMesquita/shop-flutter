@@ -25,7 +25,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
   @override
   void initState() {
     super.initState();
-
+   
     _imageUrlFocus.addListener(updateImageUrl);
   }
 
@@ -71,7 +71,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     return isValidUrl && endsWithFline;
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     final isValidate = _formKey.currentState?.validate() ?? false;
 
     if (!isValidate) {
@@ -82,11 +82,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
     setState(() => isLoading = true);
 
-    Provider.of<ProductList>(
-      context,
-      listen: false,
-    ).saveProduct(_formData).catchError((error) {
-      return showDialog<void>(
+    try {
+      await Provider.of<ProductList>(
+        context,
+        listen: false,
+      ).saveProduct(_formData);
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+    } catch (error) {
+      await showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
           title: const Text('Algo deu errado!'),
@@ -99,10 +103,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
           ],
         ),
       );
-    }).then((value) {
+    } finally {
       setState(() => isLoading = false);
-      Navigator.of(context).pop();
-    });
+    }
   }
 
   @override
@@ -113,7 +116,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
         title: const Text('Formulário de Produto'),
         actions: [
           IconButton(
-            onPressed: _submitForm,
+            onPressed:_submitForm,
             icon: const Icon(Icons.save),
           )
         ],
