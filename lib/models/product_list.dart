@@ -21,6 +21,8 @@ class ProductList with ChangeNotifier {
   }
 
   Future<void> loadingProducts() async {
+    _items.clear();
+
     final response = await http.get(Uri.parse(_url));
     // print(jsonDecode(response.body).runtimeType);
     if (response.body == 'null') return;
