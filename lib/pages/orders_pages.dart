@@ -4,50 +4,40 @@ import 'package:shop/components/app_drawer.dart';
 import 'package:shop/components/order_widget.dart';
 import 'package:shop/models/order_list.dart';
 
-class OrdersPage extends StatefulWidget {
+class OrdersPage extends StatelessWidget {
   const OrdersPage({super.key});
-
-  @override
-  State<OrdersPage> createState() => _OrdersPageState();
-}
-
-class _OrdersPageState extends State<OrdersPage> {
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<OrderList>(context, listen: false)
-        .loadingOrders()
-        .then((value) {
-      setState(() => isLoading = false);
-    });
-  }
-
-    Future<void> _refreshOrder(BuildContext context) {
+  Future<void> _refreshOrder(BuildContext context) {
     return Provider.of<OrderList>(context, listen: false).loadingOrders();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final orders = Provider.of<OrderList>(context);
-
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Meus Pedidos'),
-      ),
-      drawer: const AppDrawer(),
-      body: RefreshIndicator(
-        onRefresh: () => _refreshOrder(context),
-        child: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: orders.itemsCount,
-                itemBuilder: (ctx, index) =>
-                    OrderWidget(order: orders.items[index])),
-      ),
-    );
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Meus Pedidos'),
+        ),
+        drawer: const AppDrawer(),
+        body: RefreshIndicator(
+          onRefresh: () => _refreshOrder(context),
+          child: FutureBuilder(
+              future: Provider.of<OrderList>(context, listen: false).loadingOrders(),
+              builder: (ctx, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.error != null) {
+                  return const Center(
+                    child: Text('Ocorreu um erro!'),
+                  );
+                } else {
+                  return Consumer<OrderList>(
+                      builder: (ctx, orders, snapshot) => ListView.builder(
+                            itemCount: orders.itemsCount,
+                            itemBuilder: (ctx, index) =>
+                                OrderWidget(order: orders.items[index]),
+                          ));
+                }
+              }),
+        ));
   }
 }
