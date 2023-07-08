@@ -10,12 +10,14 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final msgSnackBar = ScaffoldMessenger.of(context);
+
     return ListTile(
       leading: CircleAvatar(
         backgroundImage: NetworkImage(productItem.imageUrl),
       ),
       title: Text(productItem.name),
-      trailing: Container(
+      trailing: SizedBox(
         width: 100,
         child: Row(
           children: [
@@ -49,9 +51,7 @@ class ProductItem extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
-                          Provider.of<ProductList>(context, listen: false)
-                              .removeProduct(productItem);
-                          Navigator.of(context).pop();
+                          Navigator.of(context).pop(true);
                           // Tbm funciona
                           // Provider.of<ProductList>(context, listen: false).removeProduct(productItem);
                         },
@@ -59,7 +59,17 @@ class ProductItem extends StatelessWidget {
                       )
                     ],
                   ),
-                );
+                ).then((value) async {
+                  if (value ?? false) {
+                    try {
+                      await Provider.of<ProductList>(context, listen: false)
+                          .removeProduct(productItem);
+                    } catch (error) {
+                      msgSnackBar.showSnackBar(
+                          SnackBar(content: Text(error.toString())));
+                    }
+                  }
+                });
               },
             )
           ],
