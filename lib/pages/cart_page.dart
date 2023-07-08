@@ -44,7 +44,7 @@ class CartPage extends StatelessWidget {
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: () {
+                    onPressed: cart.itemsCount == 0 ?  null : () {
                       Provider.of<OrderList>(
                         context,
                         listen: false,
