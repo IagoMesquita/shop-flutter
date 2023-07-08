@@ -24,6 +24,11 @@ class _OrdersPageState extends State<OrdersPage> {
     });
   }
 
+    Future<void> _refreshOrder(BuildContext context) {
+    return Provider.of<OrderList>(context, listen: false).loadingOrders();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<OrderList>(context);
@@ -34,12 +39,15 @@ class _OrdersPageState extends State<OrdersPage> {
         title: const Text('Meus Pedidos'),
       ),
       drawer: const AppDrawer(),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: orders.itemsCount,
-              itemBuilder: (ctx, index) =>
-                  OrderWidget(order: orders.items[index])),
+      body: RefreshIndicator(
+        onRefresh: () => _refreshOrder(context),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: orders.itemsCount,
+                itemBuilder: (ctx, index) =>
+                    OrderWidget(order: orders.items[index])),
+      ),
     );
   }
 }
