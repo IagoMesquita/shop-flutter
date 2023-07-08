@@ -1,16 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop/exceptions/http_exception.dart';
+import '../utils/constants.dart';
 import './product.dart';
 
 class ProductList with ChangeNotifier {
-  final _baseUrl =
-      'https://shop-cod3r-223b6-default-rtdb.firebaseio.com/products';
-
   final List<Product> _items = [];
 
   // [..._items] é um clone de _items. Se passasse _items no get, seria uma referencia, que poderia ser alterada por qlq um
@@ -25,7 +22,8 @@ class ProductList with ChangeNotifier {
   Future<void> loadingProducts() async {
     _items.clear();
 
-    final response = await http.get(Uri.parse('$_baseUrl.json'));
+    final response =
+        await http.get(Uri.parse('${Constants.PRODUCTS_BASE_URL}.json'));
     // print(jsonDecode(response.body).runtimeType);
     if (response.body == 'null') return;
 
@@ -65,16 +63,17 @@ class ProductList with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    final response = await http.post(Uri.parse('$_baseUrl.json'),
-        body: jsonEncode(
-          {
-            "name": product.name,
-            "description": product.description,
-            "price": product.price,
-            "imageUrl": product.imageUrl,
-            "isFavorite": product.isFavorite
-          },
-        ));
+    final response =
+        await http.post(Uri.parse('${Constants.PRODUCTS_BASE_URL}.json'),
+            body: jsonEncode(
+              {
+                "name": product.name,
+                "description": product.description,
+                "price": product.price,
+                "imageUrl": product.imageUrl,
+                "isFavorite": product.isFavorite
+              },
+            ));
     final id = jsonDecode(response.body)['name'];
     _items.add(
       Product(
@@ -91,7 +90,8 @@ class ProductList with ChangeNotifier {
   Future<void> updateProduct(Product product) async {
     int index = _items.indexWhere((p) => p.id == product.id);
     if (index >= 0) {
-      await http.patch(Uri.parse('$_baseUrl/${product.id}'),
+      await http.patch(
+          Uri.parse('${Constants.PRODUCTS_BASE_URL}/${product.id}.json'),
           body: jsonEncode(
             {
               "name": product.name,
@@ -114,7 +114,7 @@ class ProductList with ChangeNotifier {
       notifyListeners();
 
       final response = await http.delete(
-        Uri.parse('$_baseUrl/${product.id}.json'),
+        Uri.parse('${Constants.PRODUCTS_BASE_URL}/${product.id}.json'),
       );
 
       if (response.statusCode >= 400) {
