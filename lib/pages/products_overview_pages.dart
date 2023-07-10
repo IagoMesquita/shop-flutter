@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/models/product_list.dart';
 
 import '../components/app_drawer.dart';
 import '../components/badge_widget.dart';
@@ -10,8 +11,6 @@ import '../utils/app_routes.dart';
 
 enum FilterOptions { Favorite, All }
 
-bool _showFavorityOnly = false;
-
 class ProductsOverviewPage extends StatefulWidget {
   const ProductsOverviewPage({super.key});
 
@@ -20,6 +19,21 @@ class ProductsOverviewPage extends StatefulWidget {
 }
 
 class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
+  bool _showFavorityOnly = false;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Provider.of<ProductList>(
+      context,
+      listen: false,
+    ).loadingProducts().then((value) => setState(() {
+          _isLoading = false;
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,22 +63,23 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
           ),
           Consumer<Cart>(
             child: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(AppRoutes.CART);
-                },
-                icon:const Icon(Icons.shopping_cart),
-              ),
-            builder: (ctx, cart, child ) => BadgeWidget(
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.CART);
+              },
+              icon: const Icon(Icons.shopping_cart),
+            ),
+            builder: (ctx, cart, child) => BadgeWidget(
               value: cart.itemsCount.toString(),
               child: child!,
             ),
           )
         ],
-       
       ),
-      body: ProductGrid(
-        isShowOnlyFavorite: _showFavorityOnly,
-      ),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ProductGrid(
+              isShowOnlyFavorite: _showFavorityOnly,
+            ),
       drawer: const AppDrawer(),
     );
   }
