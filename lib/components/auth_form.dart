@@ -12,13 +12,32 @@ class AuthForm extends StatefulWidget {
 class _AuthFormState extends State<AuthForm> {
   AuthMode _authMode = AuthMode.Login;
   final passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   Map<String, String> _authData = {
     'email': '',
     'password': '',
   };
 
-  void _submit() {}
+  bool _isLogin() => _authMode == AuthMode.Login;
+  bool _isSingup() => _authMode == AuthMode.Singup;
+
+  void _switchAuthMode() {
+    if (_isLogin()) {
+      setState(() {
+        _authMode = AuthMode.Singup;
+      });
+    } else {
+      setState(() {
+        _authMode = AuthMode.Login;
+      });
+    }
+  }
+
+  void _submit() {
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +49,10 @@ class _AuthFormState extends State<AuthForm> {
       ),
       child: Container(
         padding: const EdgeInsets.all(16),
-        height: 320,
+        height: _isLogin() ? 310 : 400,
         width: deviceSize.width * 0.75,
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               TextFormField(
@@ -68,13 +88,13 @@ class _AuthFormState extends State<AuthForm> {
                   return null;
                 },
               ),
-              if (_authMode == AuthMode.Singup)
+              if (_isSingup())
                 TextFormField(
                   decoration:
                       const InputDecoration(labelText: 'Confirmar Senha'),
                   keyboardType: TextInputType.text,
                   obscureText: true,
-                  validator: _authMode == AuthMode.Login
+                  validator: _isLogin()
                       ? null
                       : (text) {
                           final password = text ?? '';
@@ -85,6 +105,9 @@ class _AuthFormState extends State<AuthForm> {
                         },
                 ),
               const SizedBox(height: 20),
+              if (_isLoading) 
+                const CircularProgressIndicator()
+              else
               ElevatedButton(
                 onPressed: _submit,
                 style: ElevatedButton.styleFrom(
@@ -96,9 +119,15 @@ class _AuthFormState extends State<AuthForm> {
                     vertical: 8,
                   ),
                 ),
-                child:
-                    Text(_authMode == AuthMode.Login ? 'ENTRAR' : 'REGISTRAR'),
+                child: Text(
+                    _authMode == AuthMode.Login ? ('ENTRAR') : 'REGISTRAR'),
               ),
+              const Spacer(),
+              TextButton(
+                onPressed: _switchAuthMode,
+                child: Text(
+                    _isLogin() ? 'Deseja se registrar ?' : 'Já possui conta ?'),
+              )
             ],
           ),
         ),
