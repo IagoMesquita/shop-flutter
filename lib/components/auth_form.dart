@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/auth.dart';
 
 enum AuthMode { Singup, Login }
 
@@ -35,8 +38,27 @@ class _AuthFormState extends State<AuthForm> {
     }
   }
 
-  void _submit() {
+  Future<void> _submit() async {
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (!isValid) {
+      return;
+    }
 
+    setState(() => _isLoading = true);
+
+    _formKey.currentState?.save();
+
+    Auth auth = Provider.of(context, listen: false);
+
+    if (_isLogin()) {
+    } else {
+      await auth.singup(
+        _authData['email'] as String,
+        _authData['password'] as String,
+      );
+    }
+
+    setState(() => _isLoading = false);
   }
 
   @override
@@ -105,23 +127,23 @@ class _AuthFormState extends State<AuthForm> {
                         },
                 ),
               const SizedBox(height: 20),
-              if (_isLoading) 
+              if (_isLoading)
                 const CircularProgressIndicator()
               else
-              ElevatedButton(
-                onPressed: _submit,
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                ElevatedButton(
+                  onPressed: _submit,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
+                      vertical: 8,
+                    ),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 8,
-                  ),
+                  child: Text(
+                      _authMode == AuthMode.Login ? ('ENTRAR') : 'REGISTRAR'),
                 ),
-                child: Text(
-                    _authMode == AuthMode.Login ? ('ENTRAR') : 'REGISTRAR'),
-              ),
               const Spacer(),
               TextButton(
                 onPressed: _switchAuthMode,
