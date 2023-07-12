@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../components/auth_form.dart';
+
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
 
@@ -26,7 +28,10 @@ class AuthPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(
                   vertical: 10,
-                  horizontal: 70,
+                  horizontal: 50,
+                ),
+                margin: const EdgeInsets.only(
+                  bottom: 20
                 ),
                 transform: Matrix4.rotationZ(-8 * pi / 180),
                 // cascade operator .. 
@@ -52,7 +57,8 @@ class AuthPage extends StatelessWidget {
                       // color: Theme.of(context).accentTextTheme.headlineLarge?.color
                       ),
                 ),
-              )
+              ),
+              const AuthForm(),
             ],
           ),
         )
