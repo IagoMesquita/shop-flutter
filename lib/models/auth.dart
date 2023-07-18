@@ -5,12 +5,15 @@ import 'package:http/http.dart' as http;
 
 class Auth with ChangeNotifier {
   static const _url =
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCdAiC5URnx8alehCOTvG4phywQrOkwOsM';
+      'https://identitytoolkit.googleapis.com/v1/accounts:?key=AIzaSyCdAiC5URnx8alehCOTvG4phywQrOkwOsM';
 
-  Future<void> singup(String email, String password) async {
+  Future<void> _authenticate (
+      String email, String password, String urlFragment) async{
+    final url =
+        'https://identitytoolkit.googleapis.com/v1/accounts:$urlFragment?key=AIzaSyCdAiC5URnx8alehCOTvG4phywQrOkwOsM';
 
     final response = await http.post(
-      Uri.parse(_url),
+      Uri.parse(url),
       body: jsonEncode(
         {
           'email': email,
@@ -19,6 +22,16 @@ class Auth with ChangeNotifier {
         },
       ),
     );
+
     print(jsonDecode(response.body));
+
+  }
+
+  Future<void> singup(String email, String password) async {
+    _authenticate(email, password, 'signUp');
+  }
+
+    Future<void> login(String email, String password) async {
+    _authenticate(email, password, 'signInWithPassword');
   }
 }
