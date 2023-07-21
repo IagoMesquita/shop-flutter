@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/exceptions/auth_exception.dart';
 
 import '../models/auth.dart';
 
@@ -38,6 +39,22 @@ class _AuthFormState extends State<AuthForm> {
     }
   }
 
+  void _showErrorDialog(String msg) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Ocorreu um erro!'),
+        content: Text(msg),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Fechar') ,
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _submit() async {
     final isValid = _formKey.currentState?.validate() ?? false;
     if (!isValid) {
@@ -50,8 +67,9 @@ class _AuthFormState extends State<AuthForm> {
 
     Auth auth = Provider.of(context, listen: false);
 
-    if (_isLogin()) {
-         await auth.login(
+   try {
+      if (_isLogin()) {
+      await auth.login(
         _authData['email'] as String,
         _authData['password'] as String,
       );
@@ -61,6 +79,11 @@ class _AuthFormState extends State<AuthForm> {
         _authData['password'] as String,
       );
     }
+   } on AuthException catch (error) {
+     _showErrorDialog(error.toString());
+   } catch (error) {
+    _showErrorDialog('Ocorreu um ero inesperado.');
+   }
 
     setState(() => _isLoading = false);
   }
