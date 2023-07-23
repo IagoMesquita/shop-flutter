@@ -8,12 +8,16 @@ import '../utils/constants.dart';
 import './product.dart';
 
 class ProductList with ChangeNotifier {
-  final List<Product> _items = [];
+
+ String _token;
+ List<Product> _items = [];
 
   // [..._items] é um clone de _items. Se passasse _items no get, seria uma referencia, que poderia ser alterada por qlq um
   List<Product> get items => [..._items];
   List<Product> get favoriteItems =>
       _items.where((item) => item.isFavorite).toList();
+
+  ProductList(this._token, this._items);
 
   int get itemCout {
     return _items.length;
@@ -23,7 +27,7 @@ class ProductList with ChangeNotifier {
     _items.clear();
 
     final response =
-        await http.get(Uri.parse('${Constants.PRODUCTS_BASE_URL}.json'));
+        await http.get(Uri.parse('${Constants.PRODUCTS_BASE_URL}.json?auth=$_token'));
     // print(jsonDecode(response.body).runtimeType);
     if (response.body == 'null') return;
 

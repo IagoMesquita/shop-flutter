@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/models/auth.dart';
 import 'package:shop/pages/auth_or_home_page.dart';
-import 'package:shop/pages/auth_page.dart';
 
 import '../models/order_list.dart';
 import '../models/product_list.dart';
@@ -12,7 +11,6 @@ import '../utils/app_routes.dart';
 import '../pages/orders_pages.dart';
 import '../pages/product_form_page.dart';
 import '../pages/products_pages.dart';
-import '../pages/products_overview_pages.dart';
 import '../pages/product_detail_page.dart';
 import '../pages/cart_page.dart';
 
@@ -31,7 +29,15 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => Auth()),
-        ChangeNotifierProvider(create: (_) => ProductList()),
+        ChangeNotifierProxyProvider<Auth, ProductList>(
+          create: (_) => ProductList('', []),
+          update: (ctx, auth, previous) {
+            return ProductList(
+              auth.token ?? '',
+              previous?.items ?? [],
+            );
+          },
+        ),
         ChangeNotifierProvider(create: (_) => Cart()),
         ChangeNotifierProvider(create: (_) => OrderList()),
       ],
@@ -47,12 +53,12 @@ class MyApp extends StatelessWidget {
             ),
             fontFamily: 'Lato'),
         routes: {
-          AppRoutes.AUTH_OR_HOME:(context) => const AuthOrHomePage(),
-          AppRoutes.PRODUCT_DETAIL:(context) => const ProductDetailPage(),
-          AppRoutes.CART:(context) => const CartPage(),
-          AppRoutes.ORDERS:(context) => const OrdersPage(),
-          AppRoutes.PRODUCTS:(context) => const ProductsPage(),
-          AppRoutes.PRODUCT_FORM:(context) => const ProductFormPage(),
+          AppRoutes.AUTH_OR_HOME: (context) => const AuthOrHomePage(),
+          AppRoutes.PRODUCT_DETAIL: (context) => const ProductDetailPage(),
+          AppRoutes.CART: (context) => const CartPage(),
+          AppRoutes.ORDERS: (context) => const OrdersPage(),
+          AppRoutes.PRODUCTS: (context) => const ProductsPage(),
+          AppRoutes.PRODUCT_FORM: (context) => const ProductFormPage(),
         },
       ),
     );
