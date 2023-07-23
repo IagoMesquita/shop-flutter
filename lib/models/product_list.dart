@@ -9,7 +9,7 @@ import './product.dart';
 
 class ProductList with ChangeNotifier {
 
- String _token;
+ final String _token;
  List<Product> _items = [];
 
   // [..._items] é um clone de _items. Se passasse _items no get, seria uma referencia, que poderia ser alterada por qlq um
@@ -68,7 +68,7 @@ class ProductList with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     final response =
-        await http.post(Uri.parse('${Constants.PRODUCTS_BASE_URL}.json'),
+        await http.post(Uri.parse('${Constants.PRODUCTS_BASE_URL}.json?auth=$_token'),
             body: jsonEncode(
               {
                 "name": product.name,
@@ -95,7 +95,7 @@ class ProductList with ChangeNotifier {
     int index = _items.indexWhere((p) => p.id == product.id);
     if (index >= 0) {
       await http.patch(
-          Uri.parse('${Constants.PRODUCTS_BASE_URL}/${product.id}.json'),
+          Uri.parse('${Constants.PRODUCTS_BASE_URL}/${product.id}.json?auth=$_token'),
           body: jsonEncode(
             {
               "name": product.name,
@@ -118,7 +118,7 @@ class ProductList with ChangeNotifier {
       notifyListeners();
 
       final response = await http.delete(
-        Uri.parse('${Constants.PRODUCTS_BASE_URL}/${product.id}.json'),
+        Uri.parse('${Constants.PRODUCTS_BASE_URL}/${product.id}.json?auth=$_token'),
       );
 
       if (response.statusCode >= 400) {
