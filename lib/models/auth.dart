@@ -91,6 +91,28 @@ class Auth with ChangeNotifier {
     return _authenticate(email, password, 'signInWithPassword');
   }
 
+  Future<void> tryAutoLogin() async {
+    if(isAuth) return;
+
+    final userData = await Store.getMap('userData');
+
+    if(userData.isEmpty) return;
+
+    final expiryDate = DateTime.parse(userData['expiryDate']) ;
+
+    if(expiryDate.isBefore(DateTime.now())) return;
+
+    _token = userData['token'];
+    _email = userData['email'];
+    _userId = userData['userId'];
+    _expiryDate = expiryDate;
+
+    _autoLogout();
+
+    notifyListeners();
+
+  }
+
   void logout() {
     _token = null;
     _email = null;
