@@ -92,15 +92,15 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> tryAutoLogin() async {
-    if(isAuth) return;
+    if (isAuth) return;
 
     final userData = await Store.getMap('userData');
 
-    if(userData.isEmpty) return;
+    if (userData.isEmpty) return;
 
-    final expiryDate = DateTime.parse(userData['expiryDate']) ;
+    final expiryDate = DateTime.parse(userData['expiryDate']);
 
-    if(expiryDate.isBefore(DateTime.now())) return;
+    if (expiryDate.isBefore(DateTime.now())) return;
 
     _token = userData['token'];
     _email = userData['email'];
@@ -110,7 +110,6 @@ class Auth with ChangeNotifier {
     _autoLogout();
 
     notifyListeners();
-
   }
 
   void logout() {
@@ -119,7 +118,9 @@ class Auth with ChangeNotifier {
     _userId = null;
     _expiryDate = null;
     _clearLogoutTimer();
-    notifyListeners();
+    Store.remove('userData').then((_) {
+      notifyListeners();
+    });
   }
 
   void _clearLogoutTimer() {
